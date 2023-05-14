@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
@@ -7,6 +8,14 @@ public class SortingPractice {
     public static void main(String[] args) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 100; i++) sb.append("-");
+
+        System.out.println("Bubble Sort");
+        Integer[] arr = new Integer[10];
+        Utility.fillArr(arr, () -> ThreadLocalRandom.current().nextInt(10));
+        System.out.println("Before sort: " + Arrays.toString(arr));
+        BubbleSort.sort(arr);
+        System.out.println("After sort: " + Arrays.toString(arr));
+        System.out.println(sb);
 
         System.out.println("Insertion Sort");
         Integer[] arr1 = new Integer[10];
@@ -41,6 +50,14 @@ public class SortingPractice {
         System.out.println("After sort: " + Arrays.toString(arr4));
         System.out.println(sb);
 
+        System.out.println("Shell Sort");
+        Integer[] arr5 = new Integer[10];
+        Utility.fillArr(arr5, () -> ThreadLocalRandom.current().nextInt(10));
+        System.out.println("Before sort: " + Arrays.toString(arr5));
+        Quicksort.sort(arr5);
+        System.out.println("After sort: " + Arrays.toString(arr5));
+        System.out.println(sb);
+
 
     }
 
@@ -48,6 +65,15 @@ public class SortingPractice {
 
 interface Sort {
     <T extends Comparable<T>> void sort(T[] arr);
+}
+
+class BubbleSort {
+    public static <T extends Comparable<T>> void sort(T[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - 1; j++)
+                if (Utility.lessThan(arr[j+1], arr[j])) Utility.swap(arr, j, j+1);
+        }
+    }
 }
 
 class InsertionSort {
@@ -127,7 +153,7 @@ class Quicksort {
         while (start <= p) {
             // System.out.println("start= " + start + ", p= " + p + "\t" + Arrays.toString(arr));
             // System.out.println("              \t " + Utility.renderArrow(start * 3) + Utility.renderArrow((p - start) * 3));
-            if (Utility.greaterThan(arr[start], arr[end-1])) {
+            if (Utility.lessThan(arr[end-1], arr[start])) {
                 Utility.swap(arr, start, p--);
             } else {
                 start++;
@@ -137,6 +163,22 @@ class Quicksort {
         // System.out.println("              \t " + Utility.renderArrow(start * 3) + Utility.renderArrow((p - start) * 3));
         Utility.swap(arr, start, end-1);
         return start;
+    }
+}
+
+class ShellSort {
+    public static <T extends Comparable<T>> void sort(T[] arr) {
+
+        int gap = arr.length/3;
+
+        while (gap > 0) {
+            for (int i = 0; i < arr.length; i++)
+                for (int j = i; j < arr.length - gap; j += gap)
+                    if (Utility.lessThan(arr[j], arr[j + gap])) {
+                        while(j < i) Utility.swap(arr, j, j+gap);
+                    }
+            gap = (gap/3) - 1;
+        }
     }
 }
 

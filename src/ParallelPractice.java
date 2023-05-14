@@ -2,9 +2,11 @@ public class ParallelPractice {
 
     public static void main(String[] args) {
         System.out.println(Thread.currentThread().getName());
-        Runnable sayHey10 = () -> {
-            for (int i = 0; i < 10; i++) System.out.println("hey " + Thread.currentThread().getName());
-        };
+        Runnable sayHey10 = new MyRunnable();
+
+//                () -> {
+//            for (int i = 0; i < 10; i++) System.out.println("hey " + Thread.currentThread().getName());
+//        };
 
         Thread t = new Thread(sayHey10);
         Thread b = new Thread(sayHey10);
@@ -14,6 +16,13 @@ public class ParallelPractice {
         b.start();
     }
 
+    public static class MyRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) System.out.println("hey " + Thread.currentThread().getName());
+        }
+    }
 
 
 

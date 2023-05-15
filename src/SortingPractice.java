@@ -166,13 +166,14 @@ class Quicksort {
     }
 }
 
+// Probably is not shellsort, not sure.
 class ShellSort {
     public static <T extends Comparable<T>> void sort(T[] arr) {
 
         int gap = arr.length/3;
 
         while (gap > 0) {
-            for (int i = 0; i < arr.length; i++)
+            for (int i = gap; i < arr.length; i++)
                 for (int j = i; j < arr.length - gap; j += gap)
                     if (Utility.lessThan(arr[j], arr[j + gap])) {
                         while(j < i) Utility.swap(arr, j, j+gap);
